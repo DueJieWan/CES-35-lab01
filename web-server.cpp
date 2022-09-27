@@ -6,7 +6,6 @@
 #include <errno.h>
 #include <unistd.h>
 
-#include <string>
 #include <string.h>
 #include <stdio.h>
 #include <iostream>
@@ -16,8 +15,9 @@
 #include <chrono>
 
 
-int getIPv4fromName(char *argv[], struct addrinfo* res, char *ipstr){
+int getIPv4fromName(char *argv[], char *ipstr){
 	struct addrinfo hints;
+	struct addrinfo* res;
 
 	// hints - modo de configurar o socket para o tipo de transporte
 	memset(&hints, 0, sizeof(hints));
@@ -44,12 +44,12 @@ int getIPv4fromName(char *argv[], struct addrinfo* res, char *ipstr){
 	strcpy(ipstr, stri);
 	std::cout << " " << ipstr << std::endl;
 
+	freeaddrinfo(res);
 	return 0;
 }
 
 
 int main(int argc, char *argv[]){
-	struct addrinfo* res;
 
 	if (argc != 4) {
         	std::cerr << "usage: web-server host port dir" << std::endl;
@@ -68,7 +68,7 @@ int main(int argc, char *argv[]){
 	}
 	
 	char ipstr[INET_ADDRSTRLEN] = {'\0'};
-	getIPv4fromName(argv, res, ipstr);
+	getIPv4fromName(argv, ipstr);
 
 	// struct sockaddr_in{
 	// short 		sin_family;	// e.g. AF_INET, AF_INET6
